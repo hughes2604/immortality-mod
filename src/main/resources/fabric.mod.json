@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "immortality",
+  "version": "${version}",
+  "name": "Immortality",
+  "description": "Elixirs of Immortality and Mortality, with a progressive death penalty.",
+  "authors": ["Billy"],
+  "license": "All-Rights-Reserved",
+  "environment": "*",
+  "entrypoints": {
+    "main": ["com.billy.immortality.ImmortalityMod"]
+  },
+  "depends": {
+    "fabricloader": ">=0.17.2",
+    "minecraft": "~1.21.10",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}
