@@ -9,6 +9,7 @@ A Fabric mod that adds two elixirs for controlling player immortality, with esca
 - Falling into the void applies the maximum penalty and returns the player to their respawn location.
 - **Arrow of Mortality** behaves like a normal arrow and deals normal arrow damage. If its hit would kill an immortal player, the player dies normally; the arrow does not remove their immortality.
 - **Elixir of Mortality** removes immortality and clears the active penalty.
+- Drinking either elixir plays a distinct sound and creates a small burst of colored particles around the player's body and legs. A private, color-coded chat message confirms the change.
 - Immortality and penalty data persist through death and relogging.
 
 The elixirs and Arrow of Mortality are available in the **Immortality** tab in the Creative inventory. They currently have no crafting recipes.
