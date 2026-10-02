@@ -4,29 +4,33 @@ import com.billy.immortality.items.ModItems;
 import com.billy.immortality.mechanics.ImmortalityManager;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 
 public final class DeathEvents {
-
-    private DeathEvents() {
-    }
+    private DeathEvents() {}
 
     public static void register() {
         ServerLivingEntityEvents.ALLOW_DEATH.register((entity, source, amount) -> {
             if (entity instanceof ServerPlayerEntity player && ImmortalityManager.isImmortal(player)) {
                 if (isMortalityArrow(source)) {
-                    return true; // Allow the death; the persistent immortality attachment remains unchanged.
+                    return true;
                 }
                 ImmortalityManager.handleLethalHit(player, source);
-                return false; // cancel the real death
+                return false;
             }
             return true;
         });
     }
 
     private static boolean isMortalityArrow(DamageSource source) {
-        return source.getSource() instanceof PersistentProjectileEntity projectile
-                && projectile.getItemStack().isOf(ModItems.ARROW_OF_MORTALITY);
+        if (source.getSource() instanceof PersistentProjectileEntity projectile
+                && projectile.getItemStack().isOf(ModItems.ARROW_OF_MORTALITY)) {
+            return true;
+        }
+        return source.isOf(DamageTypes.PLAYER_ATTACK)
+                && source.getAttacker() instanceof ServerPlayerEntity attacker
+                && attacker.getMainHandStack().isOf(ModItems.ARROW_OF_MORTALITY);
     }
 }

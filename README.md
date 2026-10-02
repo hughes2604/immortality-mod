@@ -7,9 +7,9 @@ A Fabric mod that adds two elixirs for controlling player immortality, with esca
 - **Elixir of Immortality** makes the drinker survive otherwise-fatal damage. Instead of being healed, the player is left at half a heart.
 - Each prevented death applies **Slowness** and **Mining Fatigue** for three minutes. Penalties grow stronger with repeated prevented deaths, up to level III.
 - Falling into the void applies the maximum penalty and returns the player to their respawn location.
-- **Arrow of Mortality** behaves like a normal arrow and deals normal arrow damage. If its hit would kill an immortal player, the player dies normally; the arrow does not remove their immortality.
+- **Arrow of Mortality** behaves like a normal arrow and deals normal arrow damage. It can be fired from bows and crossbows or used for a melee hit. If its damage would kill an immortal player, the player dies normally; the arrow does not remove their immortality.
 - **Elixir of Mortality** removes immortality and clears the active penalty.
-- Drinking either elixir plays a distinct sound and creates a small burst of colored particles around the player's body and legs. A private, color-coded chat message confirms the change.
+- Drinking either elixir plays a distinct sound, shows a private color-coded chat message, and creates a brief shell of colored particles around the player's body.
 - Immortality and penalty data persist through death and relogging.
 
 The elixirs and Arrow of Mortality are available in the **Immortality** tab in the Creative inventory. They currently have no crafting recipes.

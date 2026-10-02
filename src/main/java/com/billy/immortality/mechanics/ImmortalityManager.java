@@ -1,13 +1,19 @@
 package com.billy.immortality.mechanics;
 
 import com.billy.immortality.ImmortalityMod;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.UUID;
 import net.fabricmc.fabric.api.attachment.v1.AttachmentRegistry;
 import net.fabricmc.fabric.api.attachment.v1.AttachmentType;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.particle.DustParticleEffect;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
@@ -17,31 +23,25 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.TeleportTarget;
 
-/**
- * All immortality logic lives here. Everything is event-driven: nothing runs per tick.
- */
+/** All immortality logic lives here. */
 public final class ImmortalityManager {
-
     public static final int MAX_LEVEL = 3;
     public static final int PENALTY_TICKS = 3 * 60 * 20;
-
-    private static final DustParticleEffect IMMORTALITY_PARTICLES =
-            new DustParticleEffect(0xFFB833, 0.8F);
-    private static final DustParticleEffect MORTALITY_PARTICLES =
-            new DustParticleEffect(0xE61414, 0.8F);
+    private static final int TRANSFORMATION_TICKS = 40;
+    private static final double PARTICLE_RADIUS = 0.36;
+    private static final DustParticleEffect IMMORTALITY_PARTICLES = new DustParticleEffect(0xFFB833, 0.72F);
+    private static final DustParticleEffect MORTALITY_PARTICLES = new DustParticleEffect(0xE61414, 0.72F);
+    private static final Map<UUID, TransformationVisual> ACTIVE_TRANSFORMATIONS = new HashMap<>();
 
     public static final AttachmentType<ImmortalityData> DATA = AttachmentRegistry.create(
             Identifier.of(ImmortalityMod.MOD_ID, "data"),
-            builder -> builder
-                    .initializer(() -> ImmortalityData.DEFAULT)
-                    .persistent(ImmortalityData.CODEC)
-                    .copyOnDeath());
+            builder -> builder.initializer(() -> ImmortalityData.DEFAULT)
+                    .persistent(ImmortalityData.CODEC).copyOnDeath());
 
-    private ImmortalityManager() {
-    }
+    private ImmortalityManager() {}
 
-    /** Forces class loading so the attachment is registered during mod init. */
     public static void register() {
+        ServerTickEvents.END_SERVER_TICK.register(ImmortalityManager::tickTransformationParticles);
     }
 
     public static boolean isImmortal(ServerPlayerEntity player) {
@@ -52,7 +52,7 @@ public final class ImmortalityManager {
         player.setAttached(DATA, player.getAttachedOrCreate(DATA).withImmortal(true));
         player.sendMessage(Text.literal("YOU ARE NOW IMMORTAL").formatted(Formatting.GOLD), false);
         player.playSoundToPlayer(SoundEvents.BLOCK_BEACON_ACTIVATE, SoundCategory.PLAYERS, 0.8F, 1.0F);
-        spawnTransformationParticles(player, IMMORTALITY_PARTICLES);
+        startTransformation(player, IMMORTALITY_PARTICLES);
     }
 
     /** Elixir of Mortality: remove immortality, clear penalty, resume normal death. */
@@ -62,17 +62,43 @@ public final class ImmortalityManager {
         player.removeStatusEffect(StatusEffects.MINING_FATIGUE);
         player.sendMessage(Text.literal("YOU ARE NOW MORTAL").formatted(Formatting.RED), false);
         player.playSoundToPlayer(SoundEvents.BLOCK_BEACON_DEACTIVATE, SoundCategory.PLAYERS, 0.8F, 0.9F);
-        spawnTransformationParticles(player, MORTALITY_PARTICLES);
+        startTransformation(player, MORTALITY_PARTICLES);
     }
 
-    private static void spawnTransformationParticles(ServerPlayerEntity player, DustParticleEffect particles) {
+    private static void startTransformation(ServerPlayerEntity player, DustParticleEffect particles) {
+        ACTIVE_TRANSFORMATIONS.put(player.getUuid(), new TransformationVisual(particles));
+    }
+
+    private static void tickTransformationParticles(MinecraftServer server) {
+        Iterator<Map.Entry<UUID, TransformationVisual>> iterator = ACTIVE_TRANSFORMATIONS.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<UUID, TransformationVisual> entry = iterator.next();
+            ServerPlayerEntity player = server.getPlayerManager().getPlayer(entry.getKey());
+            TransformationVisual visual = entry.getValue();
+            if (player == null || visual.age >= TRANSFORMATION_TICKS) {
+                iterator.remove();
+                continue;
+            }
+            spawnTransformationShell(player, visual.particles, visual.age++);
+        }
+    }
+
+    /** Emits a slowly turning, close-fitting shell of fine particles for two seconds. */
+    private static void spawnTransformationShell(ServerPlayerEntity player, DustParticleEffect particles, int age) {
         ServerWorld world = (ServerWorld) player.getEntityWorld();
-        double x = player.getX();
-        double z = player.getZ();
-        double legsY = player.getY() + player.getHeight() * 0.2;
-        double bodyY = player.getY() + player.getHeight() * 0.65;
-        world.spawnParticles(particles, x, legsY, z, 7, 0.28, 0.12, 0.28, 0.01);
-        world.spawnParticles(particles, x, bodyY, z, 7, 0.28, 0.18, 0.28, 0.01);
+        double baseY = player.getY();
+        double height = player.getHeight();
+        double rotation = age * 0.24;
+        for (int level = 0; level < 4; level++) {
+            double y = baseY + 0.08 + (height - 0.16) * level / 3.0;
+            double angle = rotation + level * 0.35;
+            for (int side = 0; side < 2; side++) {
+                double pointAngle = angle + side * Math.PI;
+                double x = player.getX() + Math.cos(pointAngle) * PARTICLE_RADIUS;
+                double z = player.getZ() + Math.sin(pointAngle) * PARTICLE_RADIUS;
+                world.spawnParticles(particles, x, y, z, 1, 0.0, 0.0, 0.0, 0.0);
+            }
+        }
     }
 
     /** Called when an immortal player takes a hit that would have killed them. */
@@ -80,7 +106,6 @@ public final class ImmortalityManager {
         boolean void_ = source.isOf(DamageTypes.OUT_OF_WORLD);
         ImmortalityData data = player.getAttachedOrCreate(DATA);
         long now = currentTime(player);
-
         int level;
         if (void_) {
             level = MAX_LEVEL;
@@ -88,14 +113,11 @@ public final class ImmortalityManager {
             int current = data.penaltyExpiry() > now ? data.penaltyLevel() : 0;
             level = Math.min(current + 1, MAX_LEVEL);
         }
-
         player.setAttached(DATA, data.withPenalty(level, now + PENALTY_TICKS));
         applyEffects(player, level, PENALTY_TICKS);
-
-        player.setHealth(1.0F); // Half a heart: survive without being healed.
+        player.setHealth(1.0F);
         player.extinguish();
         player.fallDistance = 0;
-
         if (void_) {
             TeleportTarget target = player.getRespawnTarget(true, TeleportTarget.NO_OP);
             player.teleportTo(target);
@@ -126,5 +148,11 @@ public final class ImmortalityManager {
     /** Overworld time is shared by all dimensions and only advances while the world is loaded. */
     private static long currentTime(ServerPlayerEntity player) {
         return player.getEntityWorld().getServer().getOverworld().getTime();
+    }
+
+    private static final class TransformationVisual {
+        private final DustParticleEffect particles;
+        private int age;
+        private TransformationVisual(DustParticleEffect particles) { this.particles = particles; }
     }
 }

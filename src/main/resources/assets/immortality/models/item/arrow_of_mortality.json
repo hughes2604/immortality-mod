@@ -1,6 +1,7 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "minecraft:item/arrow"
+    "layer0": "minecraft:item/arrow",
+    "layer1": "immortality:item/arrow_tip_gold"
   }
 }
