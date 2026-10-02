@@ -12,8 +12,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.item.SwordItem;
-import net.minecraft.item.ToolMaterials;
+import net.minecraft.item.ToolMaterial;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
@@ -63,8 +62,9 @@ public final class ModItems {
         Item.Settings settings = new Item.Settings()
                 .registryKey(key)
                 .rarity(Rarity.EPIC)
+                .sword(ToolMaterial.DIAMOND, 3.0F, -2.4F)
                 .component(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
-        return Registry.register(Registries.ITEM, key, new SwordItem(ToolMaterials.DIAMOND, settings));
+        return Registry.register(Registries.ITEM, key, new Item(settings));
     }
 
     public static void register() {
