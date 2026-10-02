@@ -1,6 +1,7 @@
 package com.billy.immortality.items;
 
 import com.billy.immortality.ImmortalityMod;
+import com.billy.immortality.blocks.ModBlocks;
 import com.billy.immortality.mechanics.ImmortalityManager;
 import java.util.function.Consumer;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
@@ -11,6 +12,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.item.SwordItem;
+import net.minecraft.item.ToolMaterials;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
@@ -29,6 +32,8 @@ public final class ModItems {
             "elixir_of_mortality", ImmortalityManager::makeMortal, false);
 
     public static final Item ARROW_OF_MORTALITY = registerArrow("arrow_of_mortality");
+
+    public static final Item IMMORTALS_BANE = registerImmortalsBane();
 
     private ModItems() {
     }
@@ -52,6 +57,16 @@ public final class ModItems {
         return Registry.register(Registries.ITEM, key, new ArrowItem(new Item.Settings().registryKey(key)));
     }
 
+    private static Item registerImmortalsBane() {
+        RegistryKey<Item> key = RegistryKey.of(RegistryKeys.ITEM,
+                Identifier.of(ImmortalityMod.MOD_ID, "immortals_bane"));
+        Item.Settings settings = new Item.Settings()
+                .registryKey(key)
+                .rarity(Rarity.EPIC)
+                .component(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, true);
+        return Registry.register(Registries.ITEM, key, new SwordItem(ToolMaterials.DIAMOND, settings));
+    }
+
     public static void register() {
         RegistryKey<ItemGroup> groupKey = RegistryKey.of(
                 RegistryKeys.ITEM_GROUP, Identifier.of(ImmortalityMod.MOD_ID, "main"));
@@ -63,6 +78,8 @@ public final class ModItems {
                     entries.add(ELIXIR_OF_IMMORTALITY);
                     entries.add(ELIXIR_OF_MORTALITY);
                     entries.add(ARROW_OF_MORTALITY);
+                    entries.add(IMMORTALS_BANE);
+                    entries.add(ModBlocks.IMMORTALITY_NULLIFIER_ITEM);
                 })
                 .build());
     }

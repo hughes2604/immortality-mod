@@ -1,5 +1,6 @@
 package com.billy.immortality;
 
+import com.billy.immortality.blocks.ModBlocks;
 import com.billy.immortality.events.DeathEvents;
 import com.billy.immortality.events.PlayerEvents;
 import com.billy.immortality.items.ModItems;
@@ -12,6 +13,7 @@ public class ImmortalityMod implements ModInitializer {
     @Override
     public void onInitialize() {
         ImmortalityManager.register();
+        ModBlocks.register();
         ModItems.register();
         DeathEvents.register();
         PlayerEvents.register();

@@ -1,6 +1,10 @@
 package com.billy.immortality.mechanics;
 
 import com.billy.immortality.ImmortalityMod;
+import com.billy.immortality.blocks.ModBlocks;
+import net.minecraft.block.BlockState;
+import net.minecraft.state.property.Properties;
+import net.minecraft.util.math.BlockPos;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -115,6 +119,7 @@ public final class ImmortalityManager {
         }
         player.setAttached(DATA, data.withPenalty(level, now + PENALTY_TICKS));
         applyEffects(player, level, PENALTY_TICKS);
+        player.sendMessage(Text.literal("You died... or did you?").formatted(Formatting.GOLD), false);
         player.setHealth(1.0F);
         player.extinguish();
         player.fallDistance = 0;
@@ -123,6 +128,42 @@ public final class ImmortalityManager {
             player.teleportTo(target);
             player.fallDistance = 0;
         }
+    }
+
+    /** Clear only death penalties before a true death so they are not copied to the respawned player. */
+    public static void clearPenaltyForRealDeath(ServerPlayerEntity player) {
+        ImmortalityData data = player.getAttachedOrCreate(DATA);
+        player.setAttached(DATA, data.withPenalty(0, 0L));
+        player.removeStatusEffect(StatusEffects.SLOWNESS);
+        player.removeStatusEffect(StatusEffects.MINING_FATIGUE);
+    }
+
+    /** Whether a powered nullifier occupies a 10-block sphere around the player. */
+    public static boolean isInNullifierField(ServerPlayerEntity player, int radius) {
+        ServerWorld world = (ServerWorld) player.getEntityWorld();
+        double centerX = player.getX();
+        double centerY = player.getY() + player.getHeight() * 0.5;
+        double centerZ = player.getZ();
+        int radiusSquared = radius * radius;
+        BlockPos.Mutable pos = new BlockPos.Mutable();
+        for (int x = (int) Math.floor(centerX) - radius; x <= (int) Math.floor(centerX) + radius; x++) {
+            for (int y = (int) Math.floor(centerY) - radius; y <= (int) Math.floor(centerY) + radius; y++) {
+                for (int z = (int) Math.floor(centerZ) - radius; z <= (int) Math.floor(centerZ) + radius; z++) {
+                    double dx = x + 0.5 - centerX;
+                    double dy = y + 0.5 - centerY;
+                    double dz = z + 0.5 - centerZ;
+                    if (dx * dx + dy * dy + dz * dz > radiusSquared) {
+                        continue;
+                    }
+                    BlockState state = world.getBlockState(pos.set(x, y, z));
+                    if (state.isOf(ModBlocks.IMMORTALITY_NULLIFIER)
+                            && state.get(Properties.POWERED)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     /** Re-applies the remaining penalty after login or respawn. */

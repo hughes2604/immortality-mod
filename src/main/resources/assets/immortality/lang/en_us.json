@@ -2,5 +2,7 @@
   "item.immortality.elixir_of_immortality": "Elixir of Immortality",
   "item.immortality.elixir_of_mortality": "Elixir of Mortality",
   "item.immortality.arrow_of_mortality": "Arrow of Mortality",
+  "item.immortality.immortals_bane": "Immortal's Bane",
+  "block.immortality.immortality_nullifier": "Immortality Nullifier",
   "itemGroup.immortality.main": "Immortality"
 }

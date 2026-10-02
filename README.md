@@ -1,18 +1,21 @@
 # Immortality
 
-A Fabric mod that adds two elixirs for controlling player immortality, with escalating penalties when immortality prevents a death.
+A Fabric mod that adds elixirs, weapons, and a redstone-powered nullifier for controlling player immortality, with escalating penalties when immortality prevents a death.
 
 ## Features
 
 - **Elixir of Immortality** makes the drinker survive otherwise-fatal damage. Instead of being healed, the player is left at half a heart.
-- Each prevented death applies **Slowness** and **Mining Fatigue** for three minutes. Penalties grow stronger with repeated prevented deaths, up to level III.
+- Each prevented death shows the immortal player a private golden message and applies **Slowness** and **Mining Fatigue** for three minutes. Penalties grow stronger with repeated prevented deaths, up to level III.
 - Falling into the void applies the maximum penalty and returns the player to their respawn location.
-- **Arrow of Mortality** behaves like a normal arrow and deals normal arrow damage. It can be fired from bows and crossbows or used for a melee hit. If its damage would kill an immortal player, the player dies normally; the arrow does not remove their immortality.
+- **Arrow of Mortality** behaves like a normal arrow and deals normal arrow damage. It can be fired from bows and crossbows or used for a melee hit. If its damage would kill an immortal player, the player dies normally without losing immortality.
+- **Immortal's Bane** is an enchanted-glint golden sword with diamond sword damage and durability. Its lethal hit can kill an immortal player without removing immortality.
+- **Immortality Nullifier** is activated by redstone. It emits a red particle ring with a 10-block radius; lethal damage of any kind can kill an immortal player inside the field, while their immortality remains enabled.
+- A real death caused by Arrow of Mortality, Immortal's Bane, or the nullifier clears the accumulated Slowness and Mining Fatigue penalties before respawning.
 - **Elixir of Mortality** removes immortality and clears the active penalty.
 - Drinking either elixir plays a distinct sound, shows a private color-coded chat message, and creates a brief shell of colored particles around the player's body.
 - Immortality and penalty data persist through death and relogging.
 
-The elixirs and Arrow of Mortality are available in the **Immortality** tab in the Creative inventory. They currently have no crafting recipes.
+The elixirs, weapons, and nullifier are available in the **Immortality** tab in the Creative inventory. They currently have no crafting recipes.
 
 ## Requirements
 
