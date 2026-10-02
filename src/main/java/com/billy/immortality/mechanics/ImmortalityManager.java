@@ -9,13 +9,13 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.TeleportTarget;
-import org.joml.Vector3f;
 
 /**
  * All immortality logic lives here. Everything is event-driven: nothing runs per tick.
@@ -26,9 +26,9 @@ public final class ImmortalityManager {
     public static final int PENALTY_TICKS = 3 * 60 * 20;
 
     private static final DustParticleEffect IMMORTALITY_PARTICLES =
-            new DustParticleEffect(new Vector3f(1.0F, 0.72F, 0.12F), 0.8F);
+            new DustParticleEffect(0xFFB833, 0.8F);
     private static final DustParticleEffect MORTALITY_PARTICLES =
-            new DustParticleEffect(new Vector3f(0.9F, 0.08F, 0.08F), 0.8F);
+            new DustParticleEffect(0xE61414, 0.8F);
 
     public static final AttachmentType<ImmortalityData> DATA = AttachmentRegistry.create(
             Identifier.of(ImmortalityMod.MOD_ID, "data"),
@@ -66,12 +66,13 @@ public final class ImmortalityManager {
     }
 
     private static void spawnTransformationParticles(ServerPlayerEntity player, DustParticleEffect particles) {
+        ServerWorld world = (ServerWorld) player.getEntityWorld();
         double x = player.getX();
         double z = player.getZ();
         double legsY = player.getY() + player.getHeight() * 0.2;
         double bodyY = player.getY() + player.getHeight() * 0.65;
-        player.getServerWorld().spawnParticles(particles, x, legsY, z, 7, 0.28, 0.12, 0.28, 0.01);
-        player.getServerWorld().spawnParticles(particles, x, bodyY, z, 7, 0.28, 0.18, 0.28, 0.01);
+        world.spawnParticles(particles, x, legsY, z, 7, 0.28, 0.12, 0.28, 0.01);
+        world.spawnParticles(particles, x, bodyY, z, 7, 0.28, 0.18, 0.28, 0.01);
     }
 
     /** Called when an immortal player takes a hit that would have killed them. */
