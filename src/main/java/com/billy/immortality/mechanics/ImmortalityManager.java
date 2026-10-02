@@ -17,7 +17,7 @@ import net.minecraft.world.TeleportTarget;
 public final class ImmortalityManager {
 
     public static final int MAX_LEVEL = 3;
-    public static final int PENALTY_TICKS = 5 * 60 * 20;
+    public static final int PENALTY_TICKS = 3 * 60 * 20;
 
     public static final AttachmentType<ImmortalityData> DATA = AttachmentRegistry.create(
             Identifier.of(ImmortalityMod.MOD_ID, "data"),
@@ -65,7 +65,7 @@ public final class ImmortalityManager {
         player.setAttached(DATA, data.withPenalty(level, now + PENALTY_TICKS));
         applyEffects(player, level, PENALTY_TICKS);
 
-        player.setHealth(player.getMaxHealth());
+        player.setHealth(1.0F); // Half a heart: survive without being healed.
         player.extinguish();
         player.fallDistance = 0;
 
