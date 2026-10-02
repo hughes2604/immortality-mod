@@ -2,8 +2,6 @@ package com.billy.immortality.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
@@ -11,6 +9,7 @@ import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
+import net.minecraft.world.block.WireOrientation;
 
 public final class ImmortalityNullifierBlock extends Block {
     public static final int RADIUS = 10;
@@ -29,15 +28,15 @@ public final class ImmortalityNullifierBlock extends Block {
 
     @Override
     protected void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify) {
-        if (!world.isClient) {
+        if (!world.isClient()) {
             updatePowerAndSchedule(world, pos);
         }
     }
 
     @Override
     protected void neighborUpdate(BlockState state, World world, BlockPos pos, Block sourceBlock,
-                                  BlockPos sourcePos, boolean notify) {
-        if (!world.isClient) {
+                                  WireOrientation wireOrientation, boolean notify) {
+        if (!world.isClient()) {
             updatePowerAndSchedule(world, pos);
         }
     }
