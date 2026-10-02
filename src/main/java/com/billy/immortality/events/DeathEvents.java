@@ -1,7 +1,10 @@
 package com.billy.immortality.events;
 
+import com.billy.immortality.items.ModItems;
 import com.billy.immortality.mechanics.ImmortalityManager;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
+import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 
 public final class DeathEvents {
@@ -12,10 +15,18 @@ public final class DeathEvents {
     public static void register() {
         ServerLivingEntityEvents.ALLOW_DEATH.register((entity, source, amount) -> {
             if (entity instanceof ServerPlayerEntity player && ImmortalityManager.isImmortal(player)) {
+                if (isMortalityArrow(source)) {
+                    return true; // Allow the death; the persistent immortality attachment remains unchanged.
+                }
                 ImmortalityManager.handleLethalHit(player, source);
                 return false; // cancel the real death
             }
             return true;
         });
+    }
+
+    private static boolean isMortalityArrow(DamageSource source) {
+        return source.getSource() instanceof PersistentProjectileEntity projectile
+                && projectile.getItemStack().isOf(ModItems.ARROW_OF_MORTALITY);
     }
 }
