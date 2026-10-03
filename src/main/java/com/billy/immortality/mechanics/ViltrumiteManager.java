@@ -105,7 +105,7 @@ public final class ViltrumiteManager {
             if (tier >= 3 && player.age % 2 == 0) {
                 Vec3d velocity = player.getVelocity();
                 if (velocity.lengthSquared() > 0.08) {
-                    Vec3d trail = player.getPos().subtract(velocity.normalize().multiply(0.7))
+                    Vec3d trail = new Vec3d(player.getX(), player.getY(), player.getZ()).subtract(velocity.normalize().multiply(0.7))
                             .add(0.0, player.getHeight() * 0.55, 0.0);
                     ((ServerWorld) player.getEntityWorld()).spawnParticles(
                             ParticleTypes.CLOUD, trail.x, trail.y, trail.z,
@@ -141,16 +141,13 @@ public final class ViltrumiteManager {
         Vec3d referenceUp = Math.abs(forward.y) > 0.92 ? new Vec3d(1.0, 0.0, 0.0) : new Vec3d(0.0, 1.0, 0.0);
         Vec3d right = forward.crossProduct(referenceUp).normalize();
         Vec3d up = right.crossProduct(forward).normalize();
-        Vec3d origin = player.getPos().add(0.0, player.getHeight() * 0.52, 0.0);
+        Vec3d origin = new Vec3d(player.getX(), player.getY(), player.getZ()).add(0.0, player.getHeight() * 0.52, 0.0);
         BlockPos.Mutable pos = new BlockPos.Mutable();
 
         for (int depth = 1; depth <= 3; depth++) {
             Vec3d center = origin.add(forward.multiply(depth * 0.85));
             for (int side = -1; side <= 1; side++) {
                 for (int vertical = -1; vertical <= 1; vertical++) {
-                    if (side == 0 && vertical == 0) {
-                        // Keep the tunnel tight: one central block plus the near corners.
-                    }
                     Vec3d sample = center.add(right.multiply(side * 0.42)).add(up.multiply(vertical * 0.42));
                     BlockPos blockPos = pos.set(sample.x, sample.y, sample.z);
                     BlockState state = world.getBlockState(blockPos);
