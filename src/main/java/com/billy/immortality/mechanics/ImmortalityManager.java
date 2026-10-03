@@ -22,6 +22,7 @@ import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
@@ -95,7 +96,8 @@ public final class ImmortalityManager {
         addHiddenEffect(player, StatusEffects.JUMP_BOOST, 1);
     }
 
-    private static void addHiddenEffect(ServerPlayerEntity player, net.minecraft.entity.effect.StatusEffect effect,
+    private static void addHiddenEffect(ServerPlayerEntity player,
+                                        RegistryEntry<net.minecraft.entity.effect.StatusEffect> effect,
                                         int amplifier) {
         player.addStatusEffect(new StatusEffectInstance(effect, IMMORTAL_EFFECT_REFRESH_TICKS, amplifier,
                 false, false, false));
