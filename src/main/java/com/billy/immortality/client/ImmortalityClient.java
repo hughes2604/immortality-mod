@@ -2,6 +2,7 @@ package com.billy.immortality.client;
 
 import com.billy.immortality.network.ImmortalityMenuRequestPayload;
 import com.billy.immortality.network.ImmortalityStatusPayload;
+import com.billy.immortality.network.ViltrumiteSpeedPayload;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
@@ -13,12 +14,15 @@ import org.lwjgl.glfw.GLFW;
 
 public final class ImmortalityClient implements ClientModInitializer {
     private static KeyBinding openStatusKey;
+    private static KeyBinding flightSpeedKey;
 
     @Override
     public void onInitializeClient() {
         KeyBinding.Category category = KeyBinding.Category.create(Identifier.of("immortality", "main"));
         openStatusKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 "key.immortality.open_status", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_I, category));
+        flightSpeedKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+                "key.immortality.flight_speed", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_R, category));
 
         ClientPlayNetworking.registerGlobalReceiver(ImmortalityStatusPayload.ID, (payload, context) ->
                 context.client().execute(() -> {
@@ -42,6 +46,11 @@ public final class ImmortalityClient implements ClientModInitializer {
             while (openStatusKey.wasPressed()) {
                 if (client.player != null && client.getNetworkHandler() != null) {
                     ClientPlayNetworking.send(new ImmortalityMenuRequestPayload());
+                }
+            }
+            while (flightSpeedKey.wasPressed()) {
+                if (client.player != null && client.getNetworkHandler() != null) {
+                    ClientPlayNetworking.send(new ViltrumiteSpeedPayload(client.options.sneakKey.isPressed()));
                 }
             }
         });

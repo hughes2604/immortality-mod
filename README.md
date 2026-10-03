@@ -4,7 +4,9 @@ A Fabric mod that adds elixirs, weapons, a redstone-powered nullifier, and Viltr
 
 ## Features
 
-- **Viltrumite Chestplate** grants flight, superhuman strength, damage resistance, rapid regeneration, speed, and enhanced jumping while worn. Double-tap jump to take off; remove the chestplate to switch the powers off. Its netherite-grade armor protects the wearer in combat, and fall damage is negated while the powers are active.
+- **Viltrumite Chestplate** grants flight, Strength II, Resistance I, Regeneration II, Speed II, Jump Boost II, and fall-damage immunity while worn. Flight speed has five server-controlled steps: hover, cruise, fast, supersonic, and redline.
+- Press **R** to step up a flight speed tier; hold **sneak** and press **R** to step down. Double-tap jump to take off. High speed leaves a particle wake; crossing into supersonic speed triggers a sonic boom.
+- At **redline**, hold sprint while flying to smash a narrow path through ordinary solid blocks. The charge does not break unbreakable blocks or block entities such as chests, machines, and spawners; cleared blocks do not drop items. Removing the chestplate disables flight, resets its speed, and lets the timed buffs expire quickly.
 - **Elixir of Immortality** makes the drinker survive otherwise-fatal damage. Instead of being healed, the player is left at half a heart.
 - Each prevented death shows the immortal player a private golden message and applies **Slowness** and **Mining Fatigue** for three minutes. Penalties grow stronger with repeated prevented deaths, up to level III.
 - Falling into the void applies the maximum penalty and returns the player to their respawn location.

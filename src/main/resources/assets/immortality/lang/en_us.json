@@ -9,6 +9,12 @@
   "itemGroup.immortality.main": "Immortality",
   "key.category.immortality.main": "Immortality",
   "key.immortality.open_status": "Open Immortality Status",
+  "key.immortality.flight_speed": "Viltrumite Flight Speed",
+  "message.immortality.flight_speed.hover": "Flight speed: Hover",
+  "message.immortality.flight_speed.cruise": "Flight speed: Cruise",
+  "message.immortality.flight_speed.fast": "Flight speed: Fast",
+  "message.immortality.flight_speed.supersonic": "Flight speed: Supersonic",
+  "message.immortality.flight_speed.redline": "Flight speed: REDLINE",
   "screen.immortality.status_title": "Immortality Status",
   "screen.immortality.active": "Immortality: Active",
   "screen.immortality.deactivated": "Immortality: Deactivated"

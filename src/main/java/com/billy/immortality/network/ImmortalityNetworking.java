@@ -1,6 +1,7 @@
 package com.billy.immortality.network;
 
 import com.billy.immortality.mechanics.ImmortalityManager;
+import com.billy.immortality.mechanics.ViltrumiteManager;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -12,6 +13,8 @@ public final class ImmortalityNetworking {
     public static void register() {
         PayloadTypeRegistry.playC2S().register(
                 ImmortalityMenuRequestPayload.ID, ImmortalityMenuRequestPayload.CODEC);
+        PayloadTypeRegistry.playC2S().register(
+                ViltrumiteSpeedPayload.ID, ViltrumiteSpeedPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(
                 ImmortalityStatusPayload.ID, ImmortalityStatusPayload.CODEC);
 
@@ -21,6 +24,9 @@ public final class ImmortalityNetworking {
             boolean nullified = immortal && ImmortalityManager.isInNullifierField(player, 10);
             ServerPlayNetworking.send(player, new ImmortalityStatusPayload(true, immortal, nullified));
         });
+
+        ServerPlayNetworking.registerGlobalReceiver(ViltrumiteSpeedPayload.ID, (payload, context) ->
+                ViltrumiteManager.cycleSpeed(context.player(), payload.slower()));
     }
 
     public static void sendStatus(ServerPlayerEntity player, boolean immortal, boolean nullified) {
