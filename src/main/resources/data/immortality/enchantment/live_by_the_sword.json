@@ -38,8 +38,9 @@
         "effect": {
           "type": "minecraft:ignite",
           "duration": {
-            "type": "minecraft:constant",
-            "value": 4.0
+            "type": "minecraft:linear",
+            "base": 4.0,
+            "per_level_above_first": 0.0
           }
         },
         "requirements": {
