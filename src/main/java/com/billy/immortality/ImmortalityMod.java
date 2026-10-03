@@ -5,6 +5,7 @@ import com.billy.immortality.events.DeathEvents;
 import com.billy.immortality.events.PlayerEvents;
 import com.billy.immortality.items.ModItems;
 import com.billy.immortality.mechanics.ImmortalityManager;
+import com.billy.immortality.mechanics.ViltrumiteManager;
 import com.billy.immortality.network.ImmortalityNetworking;
 import net.fabricmc.api.ModInitializer;
 
@@ -19,5 +20,6 @@ public class ImmortalityMod implements ModInitializer {
         ModItems.register();
         DeathEvents.register();
         PlayerEvents.register();
+        ViltrumiteManager.register();
     }
 }
