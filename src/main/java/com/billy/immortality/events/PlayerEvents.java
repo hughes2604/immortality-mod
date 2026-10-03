@@ -10,10 +10,14 @@ public final class PlayerEvents {
     }
 
     public static void register() {
-        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) ->
-                ImmortalityManager.restorePenalty(handler.getPlayer()));
+        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
+            ImmortalityManager.restorePenalty(handler.getPlayer());
+            ImmortalityManager.restoreImmortalEffects(handler.getPlayer());
+        });
 
-        ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer, newPlayer, alive) ->
-                ImmortalityManager.restorePenalty(newPlayer));
+        ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer, newPlayer, alive) -> {
+            ImmortalityManager.restorePenalty(newPlayer);
+            ImmortalityManager.restoreImmortalEffects(newPlayer);
+        });
     }
 }

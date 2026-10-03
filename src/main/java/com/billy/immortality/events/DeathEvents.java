@@ -15,9 +15,13 @@ public final class DeathEvents {
     public static void register() {
         ServerLivingEntityEvents.ALLOW_DEATH.register((entity, source, amount) -> {
             if (entity instanceof ServerPlayerEntity player && ImmortalityManager.isImmortal(player)) {
-                if (isMortalityWeapon(source) || ImmortalityManager.isInNullifierField(player,
-                        ImmortalityNullifierBlock.RADIUS)) {
+                if (ImmortalityManager.isInNullifierField(player, ImmortalityNullifierBlock.RADIUS)
+                        || isMortalityArrow(source)) {
                     ImmortalityManager.clearPenaltyForRealDeath(player);
+                    return true;
+                }
+                if (isImmortalsBane(source)) {
+                    ImmortalityManager.becomeMortalFromBane(player);
                     return true;
                 }
                 ImmortalityManager.handleLethalHit(player, source);
@@ -27,18 +31,23 @@ public final class DeathEvents {
         });
     }
 
-    private static boolean isMortalityWeapon(DamageSource source) {
+    private static boolean isMortalityArrow(DamageSource source) {
         if (source.getSource() instanceof PersistentProjectileEntity projectile
                 && projectile.getItemStack().isOf(ModItems.ARROW_OF_MORTALITY)) {
             return true;
         }
+        return isPlayerHolding(source, ModItems.ARROW_OF_MORTALITY);
+    }
+
+    private static boolean isImmortalsBane(DamageSource source) {
+        return isPlayerHolding(source, ModItems.IMMORTALS_BANE);
+    }
+
+    private static boolean isPlayerHolding(DamageSource source, net.minecraft.item.Item item) {
         if (!source.isOf(DamageTypes.PLAYER_ATTACK)
                 || !(source.getAttacker() instanceof ServerPlayerEntity attacker)) {
             return false;
         }
-        return attacker.getMainHandStack().isOf(ModItems.ARROW_OF_MORTALITY)
-                || attacker.getOffHandStack().isOf(ModItems.ARROW_OF_MORTALITY)
-                || attacker.getMainHandStack().isOf(ModItems.IMMORTALS_BANE)
-                || attacker.getOffHandStack().isOf(ModItems.IMMORTALS_BANE);
+        return attacker.getMainHandStack().isOf(item) || attacker.getOffHandStack().isOf(item);
     }
 }

@@ -37,6 +37,7 @@ public final class ImmortalityManager {
     private static final double PARTICLE_RADIUS = 0.36;
     private static final DustParticleEffect IMMORTALITY_PARTICLES = new DustParticleEffect(0xFFB833, 0.72F);
     private static final DustParticleEffect MORTALITY_PARTICLES = new DustParticleEffect(0xE61414, 0.72F);
+    private static final int IMMORTAL_EFFECT_REFRESH_TICKS = 220;
     private static final Map<UUID, TransformationVisual> ACTIVE_TRANSFORMATIONS = new HashMap<>();
     private static final Set<UUID> NULLIFIED_PLAYERS = new HashSet<>();
     private static int nullifierPresenceCheckTicker;
@@ -60,17 +61,53 @@ public final class ImmortalityManager {
         player.setAttached(DATA, player.getAttachedOrCreate(DATA).withImmortal(true));
         player.sendMessage(Text.literal("YOU ARE NOW IMMORTAL").formatted(Formatting.GOLD), false);
         player.playSoundToPlayer(SoundEvents.BLOCK_BEACON_ACTIVATE, SoundCategory.PLAYERS, 0.8F, 1.0F);
+        applyImmortalEffects(player);
         startTransformation(player, IMMORTALITY_PARTICLES);
     }
 
     /** Elixir of Mortality: remove immortality, clear penalty, resume normal death. */
     public static void makeMortal(ServerPlayerEntity player) {
         player.setAttached(DATA, ImmortalityData.DEFAULT);
+        removeImmortalEffects(player);
         player.removeStatusEffect(StatusEffects.SLOWNESS);
         player.removeStatusEffect(StatusEffects.MINING_FATIGUE);
         player.sendMessage(Text.literal("YOU ARE NOW MORTAL").formatted(Formatting.RED), false);
         player.playSoundToPlayer(SoundEvents.BLOCK_BEACON_DEACTIVATE, SoundCategory.PLAYERS, 0.8F, 0.9F);
         startTransformation(player, MORTALITY_PARTICLES);
+    }
+
+    /** Removes immortality and its hidden buffs when Immortal's Bane causes a real death. */
+    public static void becomeMortalFromBane(ServerPlayerEntity player) {
+        player.setAttached(DATA, ImmortalityData.DEFAULT);
+        removeImmortalEffects(player);
+        player.removeStatusEffect(StatusEffects.SLOWNESS);
+        player.removeStatusEffect(StatusEffects.MINING_FATIGUE);
+        player.sendMessage(Text.literal("YOU ARE NO LONGER IMMORTAL").formatted(Formatting.RED), false);
+        startTransformation(player, MORTALITY_PARTICLES);
+    }
+
+    private static void applyImmortalEffects(ServerPlayerEntity player) {
+        addHiddenEffect(player, StatusEffects.STRENGTH, 2);
+        addHiddenEffect(player, StatusEffects.LUCK, 2);
+        addHiddenEffect(player, StatusEffects.REGENERATION, 2);
+        addHiddenEffect(player, StatusEffects.SPEED, 1);
+        addHiddenEffect(player, StatusEffects.NIGHT_VISION, 0);
+        addHiddenEffect(player, StatusEffects.JUMP_BOOST, 1);
+    }
+
+    private static void addHiddenEffect(ServerPlayerEntity player, net.minecraft.entity.effect.StatusEffect effect,
+                                        int amplifier) {
+        player.addStatusEffect(new StatusEffectInstance(effect, IMMORTAL_EFFECT_REFRESH_TICKS, amplifier,
+                false, false, false));
+    }
+
+    private static void removeImmortalEffects(ServerPlayerEntity player) {
+        player.removeStatusEffect(StatusEffects.STRENGTH);
+        player.removeStatusEffect(StatusEffects.LUCK);
+        player.removeStatusEffect(StatusEffects.REGENERATION);
+        player.removeStatusEffect(StatusEffects.SPEED);
+        player.removeStatusEffect(StatusEffects.NIGHT_VISION);
+        player.removeStatusEffect(StatusEffects.JUMP_BOOST);
     }
 
     private static void startTransformation(ServerPlayerEntity player, DustParticleEffect particles) {
@@ -92,6 +129,11 @@ public final class ImmortalityManager {
         if (++nullifierPresenceCheckTicker >= 5) {
             nullifierPresenceCheckTicker = 0;
             tickNullifierPresence(server);
+            for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
+                if (isImmortal(player)) {
+                    applyImmortalEffects(player);
+                }
+            }
         }
     }
 
@@ -196,6 +238,13 @@ public final class ImmortalityManager {
             }
         }
         return false;
+    }
+
+    /** Re-applies immortality buffs after login or respawn. */
+    public static void restoreImmortalEffects(ServerPlayerEntity player) {
+        if (isImmortal(player)) {
+            applyImmortalEffects(player);
+        }
     }
 
     /** Re-applies the remaining penalty after login or respawn. */
