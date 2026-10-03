@@ -3,12 +3,13 @@
   "id": "immortality",
   "version": "${version}",
   "name": "Immortality",
-  "description": "Elixirs of Immortality and Mortality, with a progressive death penalty.",
+  "description": "Elixirs of Immortality, weapons, and a redstone nullifier.",
   "authors": ["Billy"],
   "license": "All-Rights-Reserved",
   "environment": "*",
   "entrypoints": {
-    "main": ["com.billy.immortality.ImmortalityMod"]
+    "main": ["com.billy.immortality.ImmortalityMod"],
+    "client": ["com.billy.immortality.client.ImmortalityClient"]
   },
   "depends": {
     "fabricloader": ">=0.17.2",

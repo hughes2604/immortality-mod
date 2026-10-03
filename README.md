@@ -9,7 +9,7 @@ A Fabric mod that adds elixirs, weapons, and a redstone-powered nullifier for co
 - Falling into the void applies the maximum penalty and returns the player to their respawn location.
 - **Arrow of Mortality** behaves like a normal arrow and deals normal arrow damage. It can be fired from bows and crossbows or used for a melee hit. If its damage would kill an immortal player, the player dies normally without losing immortality.
 - **Immortal's Bane** is an enchanted-glint golden sword with diamond sword damage and durability. Its lethal hit can kill an immortal player without removing immortality.
-- **Nullifier Conduit** is activated by redstone. It emits a red particle ring with a 10-block radius; lethal damage of any kind can kill an immortal player inside the field, while their immortality remains enabled.
+- **Immortality Nullifier Conduit** is activated by redstone. It emits a red particle ring with a 10-block radius; lethal damage of any kind can kill an immortal player inside the field, while their immortality remains enabled.
 - A real death caused by Arrow of Mortality, Immortal's Bane, or the nullifier clears the accumulated Slowness and Mining Fatigue penalties before respawning.
 - **Elixir of Mortality** removes immortality and clears the active penalty.
 - Drinking either elixir plays a distinct sound, shows a private color-coded chat message, and creates a brief shell of colored particles around the player's body.

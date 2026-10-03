@@ -3,6 +3,12 @@
   "item.immortality.elixir_of_mortality": "Elixir of Mortality",
   "item.immortality.arrow_of_mortality": "Arrow of Mortality",
   "item.immortality.immortals_bane": "Immortal's Bane",
-  "block.immortality.immortality_nullifier": "Nullifier Conduit",
-  "itemGroup.immortality.main": "Immortality"
+  "item.immortality.immortality_nullifier": "Immortality Nullifier Conduit",
+  "block.immortality.immortality_nullifier": "Immortality Nullifier Conduit",
+  "itemGroup.immortality.main": "Immortality",
+  "key.category.immortality.main": "Immortality",
+  "key.immortality.open_status": "Open Immortality Status",
+  "screen.immortality.status_title": "Immortality Status",
+  "screen.immortality.active": "Immortality: Active",
+  "screen.immortality.deactivated": "Immortality: Deactivated"
 }
