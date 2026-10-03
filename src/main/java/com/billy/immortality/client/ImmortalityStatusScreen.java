@@ -19,7 +19,7 @@ public final class ImmortalityStatusScreen extends Screen {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        renderBackground(context, mouseX, mouseY, delta);
+        super.render(context, mouseX, mouseY, delta);
 
         int panelWidth = 320;
         int panelHeight = 112;
@@ -40,7 +40,6 @@ public final class ImmortalityStatusScreen extends Screen {
                 : Text.translatable("screen.immortality.active").formatted(Formatting.GOLD);
         context.drawCenteredTextWithShadow(textRenderer, status, width / 2, top + 63,
                 nullified ? 0xFFFF5555 : 0xFFFFD76A);
-        super.render(context, mouseX, mouseY, delta);
     }
 
     @Override
