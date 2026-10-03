@@ -2,17 +2,15 @@ package com.billy.immortality.blocks;
 import java.util.UUID;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.nbt.ReadView;
-import net.minecraft.nbt.WriteView;
+import net.minecraft.storage.ReadView;
+import net.minecraft.storage.WriteView;
 import net.minecraft.util.math.BlockPos;
 
 public final class PocketDoorBlockEntity extends BlockEntity {
     private UUID owner;
     private BlockPos overworldReturn = BlockPos.ORIGIN;
 
-    public PocketDoorBlockEntity(BlockPos pos, BlockState state) {
-        super(ModBlockEntities.POCKET_DOOR, pos, state);
-    }
+    public PocketDoorBlockEntity(BlockPos pos, BlockState state) { super(ModBlockEntities.POCKET_DOOR, pos, state); }
     public UUID getOwner() { return owner; }
     public void setOwner(UUID owner) { this.owner = owner; markDirty(); }
     public BlockPos getOverworldReturn() { return overworldReturn; }
