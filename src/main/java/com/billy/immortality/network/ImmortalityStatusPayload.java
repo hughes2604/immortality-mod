@@ -11,9 +11,9 @@ public record ImmortalityStatusPayload(boolean showScreen, boolean immortal, boo
     public static final Id<ImmortalityStatusPayload> ID =
             new Id<>(Identifier.of("immortality", "immortality_status"));
     public static final PacketCodec<RegistryByteBuf, ImmortalityStatusPayload> CODEC = PacketCodec.tuple(
-            PacketCodecs.BOOL, ImmortalityStatusPayload::showScreen,
-            PacketCodecs.BOOL, ImmortalityStatusPayload::immortal,
-            PacketCodecs.BOOL, ImmortalityStatusPayload::nullified,
+            PacketCodecs.BOOLEAN, ImmortalityStatusPayload::showScreen,
+            PacketCodecs.BOOLEAN, ImmortalityStatusPayload::immortal,
+            PacketCodecs.BOOLEAN, ImmortalityStatusPayload::nullified,
             ImmortalityStatusPayload::new
     );
 
