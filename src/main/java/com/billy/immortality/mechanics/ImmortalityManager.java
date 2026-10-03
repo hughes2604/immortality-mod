@@ -6,8 +6,10 @@ import net.minecraft.block.BlockState;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import net.fabricmc.fabric.api.attachment.v1.AttachmentRegistry;
 import net.fabricmc.fabric.api.attachment.v1.AttachmentType;
@@ -36,6 +38,8 @@ public final class ImmortalityManager {
     private static final DustParticleEffect IMMORTALITY_PARTICLES = new DustParticleEffect(0xFFB833, 0.72F);
     private static final DustParticleEffect MORTALITY_PARTICLES = new DustParticleEffect(0xE61414, 0.72F);
     private static final Map<UUID, TransformationVisual> ACTIVE_TRANSFORMATIONS = new HashMap<>();
+    private static final Set<UUID> NULLIFIED_PLAYERS = new HashSet<>();
+    private static int nullifierPresenceCheckTicker;
 
     public static final AttachmentType<ImmortalityData> DATA = AttachmentRegistry.create(
             Identifier.of(ImmortalityMod.MOD_ID, "data"),
@@ -85,6 +89,34 @@ public final class ImmortalityManager {
             }
             spawnTransformationShell(player, visual.particles, visual.age++);
         }
+        if (++nullifierPresenceCheckTicker >= 5) {
+            nullifierPresenceCheckTicker = 0;
+            tickNullifierPresence(server);
+        }
+    }
+
+    /** Sends private messages when an immortal enters or leaves a powered nullifier field. */
+    private static void tickNullifierPresence(MinecraftServer server) {
+        Set<UUID> onlinePlayers = new HashSet<>();
+        for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
+            UUID playerId = player.getUuid();
+            onlinePlayers.add(playerId);
+            if (!isImmortal(player)) {
+                NULLIFIED_PLAYERS.remove(playerId);
+                continue;
+            }
+
+            boolean wasNullified = NULLIFIED_PLAYERS.contains(playerId);
+            boolean isNullified = isInNullifierField(player, 10);
+            if (isNullified && !wasNullified) {
+                NULLIFIED_PLAYERS.add(playerId);
+                player.sendMessage(Text.literal("IMMORTALITY NULLIFIED").formatted(Formatting.RED), false);
+            } else if (!isNullified && wasNullified) {
+                NULLIFIED_PLAYERS.remove(playerId);
+                player.sendMessage(Text.literal("IMMORTALITY RESTORED").formatted(Formatting.RED), false);
+            }
+        }
+        NULLIFIED_PLAYERS.retainAll(onlinePlayers);
     }
 
     /** Emits a slowly turning, close-fitting shell of fine particles for two seconds. */

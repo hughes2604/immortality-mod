@@ -1,6 +1,6 @@
 {
   "variants": {
     "powered=false": { "model": "immortality:block/immortality_nullifier" },
-    "powered=true": { "model": "immortality:block/immortality_nullifier" }
+    "powered=true": { "model": "immortality:block/immortality_nullifier_active" }
   }
 }
