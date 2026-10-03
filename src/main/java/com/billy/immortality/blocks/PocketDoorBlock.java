@@ -1,6 +1,6 @@
 package com.billy.immortality.blocks;
-
 import com.billy.immortality.ImmortalityMod;
+import com.mojang.serialization.MapCodec;
 import java.util.UUID;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -25,9 +25,13 @@ import net.minecraft.world.TeleportTarget;
 import net.minecraft.world.World;
 
 public final class PocketDoorBlock extends BlockWithEntity {
+    public static final MapCodec<PocketDoorBlock> CODEC = createCodec(PocketDoorBlock::new);
     public static final RegistryKey<World> POCKET_DIMENSION = RegistryKey.of(
             RegistryKeys.WORLD, Identifier.of(ImmortalityMod.MOD_ID, "pocket"));
     public PocketDoorBlock(Settings settings) { super(settings); }
+
+    @Override
+    protected MapCodec<? extends BlockWithEntity> getCodec() { return CODEC; }
 
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) { }
@@ -47,8 +51,7 @@ public final class PocketDoorBlock extends BlockWithEntity {
     }
 
     @Override
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos,
-                                 PlayerEntity player, BlockHitResult hit) {
+    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
         if (world.isClient()) return ActionResult.SUCCESS;
         if (!(player instanceof ServerPlayerEntity serverPlayer)
                 || !(world.getBlockEntity(pos) instanceof PocketDoorBlockEntity door)) return ActionResult.PASS;
@@ -58,7 +61,6 @@ public final class PocketDoorBlock extends BlockWithEntity {
             return ActionResult.FAIL;
         }
         if (world.getServer() == null) return ActionResult.FAIL;
-
         if (world.getRegistryKey().equals(POCKET_DIMENSION)) {
             teleport(serverPlayer, world.getServer().getOverworld(), door.getOverworldReturn());
         } else {
@@ -76,9 +78,7 @@ public final class PocketDoorBlock extends BlockWithEntity {
             int z = 8;
             int y = pocket.getTopY(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, x, z);
             BlockPos exit = new BlockPos(x, y, z);
-            if (!pocket.getBlockState(exit).isOf(this)) {
-                pocket.setBlockState(exit, getDefaultState(), Block.NOTIFY_ALL);
-            }
+            if (!pocket.getBlockState(exit).isOf(this)) pocket.setBlockState(exit, getDefaultState(), Block.NOTIFY_ALL);
             if (pocket.getBlockEntity(exit) instanceof PocketDoorBlockEntity exitDoor) {
                 exitDoor.setOwner(owner);
                 exitDoor.setOverworldReturn(pos);

@@ -1,21 +1,41 @@
-# Immortality
+# Minecraft Immortality Mod
 
-A Fabric mod that adds elixirs, weapons, and a redstone-powered nullifier for controlling player immortality, with escalating penalties when immortality prevents a death.
+A Fabric mod about immortality, mortality, and the places and weapons that can challenge eternal life.
 
 ## Features
 
-- **Elixir of Immortality** makes the drinker survive otherwise-fatal damage. Instead of being healed, the player is left at half a heart.
-- Each prevented death shows the immortal player a private golden message and applies **Slowness** and **Mining Fatigue** for three minutes. Penalties grow stronger with repeated prevented deaths, up to level III.
-- Falling into the void applies the maximum penalty and returns the player to their respawn location.
-- **Arrow of Mortality** behaves like a normal arrow and deals normal arrow damage. It can be fired from bows and crossbows or used for a melee hit. If its damage would kill an immortal player, the player dies normally without losing immortality.
-- **Immortal's Bane** is an enchanted-glint golden sword with diamond sword damage and durability. Its lethal hit can kill an immortal player without removing immortality.
-- **Immortality Nullifier Conduit** is activated by redstone. It emits a red particle ring with a 10-block radius; lethal damage of any kind can kill an immortal player inside the field, while their immortality remains enabled.
-- A real death caused by Arrow of Mortality, Immortal's Bane, or the nullifier clears the accumulated Slowness and Mining Fatigue penalties before respawning.
-- **Elixir of Mortality** removes immortality and clears the active penalty.
-- Drinking either elixir plays a distinct sound, shows a private color-coded chat message, and creates a brief shell of colored particles around the player's body.
-- Immortality and penalty data persist through death and relogging.
+### Immortality and elixirs
 
-The elixirs, weapons, and nullifier are available in the **Immortality** tab in the Creative inventory. They currently have no crafting recipes.
+- **Elixir of Immortality** makes the drinker immortal. Lethal damage leaves them at half a heart instead of restoring their health.
+- Immortality grants hidden Strength III, Luck III, Regeneration III, Speed II, Night Vision, and Jump Boost II effects.
+- Every prevented death sends the immortal player a private golden message: “You died... or did you?”
+- Prevented deaths apply escalating Slowness and Mining Fatigue penalties for three minutes. Falling into the void applies the maximum penalty and returns the player to their respawn location.
+- **Elixir of Mortality** removes immortality.
+- Drinking either elixir plays a distinct sound, sends a private colored chat message, and surrounds the drinker with a short transformation particle effect.
+
+### Weapons and nullification
+
+- **Arrow of Mortality** behaves like a normal arrow, including normal damage and use with bows and crossbows. It can kill an immortal player when its hit would otherwise be lethal; immortality remains active.
+- **Immortal’s Bane** is an enchanted golden sword with diamond-sword damage and durability. It can kill an immortal player without removing immortality.
+- **Nullifier Conduit** is a redstone-activated block that creates a red particle ring with an approximately 10-block radius. Immortality is suppressed for immortal players inside the field, allowing lethal damage from any source to kill them. Their immortality remains active after death.
+
+### Elder Oak biome and flowers
+
+- **Elder Oak** is a pale, desaturated woodland with pale grass, birch and oak trees, and two flowers.
+- **White Rose** grants mild Regeneration while a player stands on it.
+- **Red Devil** causes mild Nausea while a player stands on it.
+- The biome’s landmarks are configured to generate at about 20% of chunks.
+
+### Pocket Doors and dimension
+
+- The **Pocket Door** opens into an endless woodland dimension based on Elder Oak.
+- Each door is owned by the player who places it. Only that player can use it; breaking it returns a door item to the owner when they are online.
+
+### Enchantment
+
+- **Live by the Sword** is a sword-only enchantment that adds 7 damage and ignites the target. It has a 5% chance to appear as an enchanted book in abandoned mineshaft chests.
+
+The elixirs, weapons, blocks, flowers, and Pocket Door are available in the **Immortality** Creative inventory tab. They currently have no crafting recipes.
 
 ## Requirements
 
@@ -27,10 +47,10 @@ The elixirs, weapons, and nullifier are available in the **Immortality** tab in 
 ## Install
 
 1. Install Fabric Loader for Minecraft 1.21.10 and add Fabric API to your mods.
-2. Download the `immortality-jar` artifact from a successful run of the **build** workflow in this repository's GitHub Actions.
-3. Put the downloaded mod JAR in your Minecraft `mods` folder.
-4. Launch Minecraft with the Fabric profile.
+2. Download the immortality-jar artifact from a successful run of this repository’s **build** workflow on GitHub Actions.
+3. Put the downloaded mod JAR in your Minecraft mods folder.
+4. Launch the game with the Fabric profile.
 
 ## Build
 
-The repository's GitHub Actions workflow builds the mod on every push. To start a build manually, open **Actions**, select **build**, and choose **Run workflow**. Download the `immortality-jar` artifact from the completed run.
+The GitHub Actions **build** workflow builds the mod on every push. To start a build manually, open **Actions**, select **build**, and choose **Run workflow**. Download the immortality-jar artifact from the completed run.
