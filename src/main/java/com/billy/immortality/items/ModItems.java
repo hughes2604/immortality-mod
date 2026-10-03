@@ -8,13 +8,13 @@ import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.ConsumableComponents;
 import net.minecraft.item.ArrowItem;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.ArmorMaterials;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.ToolMaterial;
+import net.minecraft.item.equipment.ArmorMaterials;
+import net.minecraft.item.equipment.EquipmentType;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
@@ -77,9 +77,9 @@ public final class ModItems {
         Item.Settings settings = new Item.Settings()
                 .registryKey(key)
                 .maxDamage(592)
+                .armor(ArmorMaterials.NETHERITE, EquipmentType.CHESTPLATE)
                 .rarity(Rarity.EPIC);
-        return Registry.register(Registries.ITEM, key,
-                new ArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, settings));
+        return Registry.register(Registries.ITEM, key, new Item(settings));
     }
 
     public static void register() {
