@@ -13,6 +13,8 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.ToolMaterial;
+import net.minecraft.item.equipment.ArmorMaterials;
+import net.minecraft.item.equipment.EquipmentType;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
@@ -33,6 +35,8 @@ public final class ModItems {
     public static final Item ARROW_OF_MORTALITY = registerArrow("arrow_of_mortality");
 
     public static final Item IMMORTALS_BANE = registerImmortalsBane();
+
+    public static final Item VILTRUMITE_CHESTPLATE = registerViltrumiteChestplate();
 
     private ModItems() {
     }
@@ -67,6 +71,17 @@ public final class ModItems {
         return Registry.register(Registries.ITEM, key, new Item(settings));
     }
 
+    private static Item registerViltrumiteChestplate() {
+        RegistryKey<Item> key = RegistryKey.of(RegistryKeys.ITEM,
+                Identifier.of(ImmortalityMod.MOD_ID, "viltrumite_chestplate"));
+        Item.Settings settings = new Item.Settings()
+                .registryKey(key)
+                .maxDamage(592)
+                .armor(ArmorMaterials.NETHERITE, EquipmentType.CHESTPLATE)
+                .rarity(Rarity.EPIC);
+        return Registry.register(Registries.ITEM, key, new Item(settings));
+    }
+
     public static void register() {
         RegistryKey<ItemGroup> groupKey = RegistryKey.of(
                 RegistryKeys.ITEM_GROUP, Identifier.of(ImmortalityMod.MOD_ID, "main"));
@@ -79,6 +94,7 @@ public final class ModItems {
                     entries.add(ELIXIR_OF_MORTALITY);
                     entries.add(ARROW_OF_MORTALITY);
                     entries.add(IMMORTALS_BANE);
+                    entries.add(VILTRUMITE_CHESTPLATE);
                     entries.add(ModBlocks.IMMORTALITY_NULLIFIER_ITEM);
                 })
                 .build());

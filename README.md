@@ -1,9 +1,10 @@
 # Immortality
 
-A Fabric mod that adds elixirs, weapons, and a redstone-powered nullifier for controlling player immortality, with escalating penalties when immortality prevents a death.
+A Fabric mod that adds elixirs, weapons, a redstone-powered nullifier, and Viltrumite powers activated by a chestplate.
 
 ## Features
 
+- **Viltrumite Chestplate** grants flight, superhuman strength, damage resistance, rapid regeneration, speed, and enhanced jumping while worn. Double-tap jump to take off; remove the chestplate to switch the powers off. Its netherite-grade armor protects the wearer in combat, and fall damage is negated while the powers are active.
 - **Elixir of Immortality** makes the drinker survive otherwise-fatal damage. Instead of being healed, the player is left at half a heart.
 - Each prevented death shows the immortal player a private golden message and applies **Slowness** and **Mining Fatigue** for three minutes. Penalties grow stronger with repeated prevented deaths, up to level III.
 - Falling into the void applies the maximum penalty and returns the player to their respawn location.
@@ -15,7 +16,7 @@ A Fabric mod that adds elixirs, weapons, and a redstone-powered nullifier for co
 - Drinking either elixir plays a distinct sound, shows a private color-coded chat message, and creates a brief shell of colored particles around the player's body.
 - Immortality and penalty data persist through death and relogging.
 
-The elixirs, weapons, and nullifier are available in the **Immortality** tab in the Creative inventory. They currently have no crafting recipes.
+The elixirs, chestplate, weapons, and nullifier are available in the **Immortality** tab in the Creative inventory. Items currently have no crafting recipes.
 
 ## Requirements
 
