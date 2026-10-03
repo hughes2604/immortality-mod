@@ -12,6 +12,7 @@
   "infiniburn": "#minecraft:infiniburn_overworld",
   "effects": "minecraft:overworld",
   "ambient_light": 0.0,
+  "cloud_height": 192,
   "piglin_safe": false,
   "has_raids": true,
   "monster_spawn_block_light_limit": 0,

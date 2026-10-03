@@ -23,7 +23,11 @@
       {
         "effect": {
           "type": "minecraft:add",
-          "value": 7.0
+          "value": {
+            "type": "minecraft:linear",
+            "base": 7.0,
+            "per_level_above_first": 0.0
+          }
         }
       }
     ],
