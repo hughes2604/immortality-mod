@@ -1,0 +1,50 @@
+{
+  "description": {
+    "translate": "enchantment.immortality.live_by_the_sword"
+  },
+  "supported_items": "#minecraft:enchantable/sword",
+  "primary_items": "#minecraft:enchantable/sword",
+  "weight": 2,
+  "max_level": 1,
+  "min_cost": {
+    "base": 15,
+    "per_level_above_first": 0
+  },
+  "max_cost": {
+    "base": 65,
+    "per_level_above_first": 0
+  },
+  "anvil_cost": 4,
+  "slots": [
+    "mainhand"
+  ],
+  "effects": {
+    "minecraft:damage": [
+      {
+        "effect": {
+          "type": "minecraft:add",
+          "value": 7.0
+        }
+      }
+    ],
+    "minecraft:post_attack": [
+      {
+        "enchanted": "attacker",
+        "affected": "victim",
+        "effect": {
+          "type": "minecraft:ignite",
+          "duration": {
+            "type": "minecraft:constant",
+            "value": 4.0
+          }
+        },
+        "requirements": {
+          "condition": "minecraft:damage_source_properties",
+          "predicate": {
+            "is_direct": true
+          }
+        }
+      }
+    ]
+  }
+}

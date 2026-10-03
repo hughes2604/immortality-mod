@@ -135,6 +135,7 @@ public final class ImmortalityManager {
                 if (isImmortal(player)) {
                     applyImmortalEffects(player);
                 }
+                applyStandingFlowerEffect(player);
             }
         }
     }
@@ -178,6 +179,16 @@ public final class ImmortalityManager {
                 double z = player.getZ() + Math.sin(pointAngle) * PARTICLE_RADIUS;
                 world.spawnParticles(particles, x, y, z, 1, 0.0, 0.0, 0.0, 0.0);
             }
+        }
+    }
+
+    private static void applyStandingFlowerEffect(ServerPlayerEntity player) {
+        BlockPos beneath = player.getBlockPos().down();
+        BlockState state = player.getEntityWorld().getBlockState(beneath);
+        if (state.isOf(ModBlocks.WHITE_ROSE)) {
+            player.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 10, 0));
+        } else if (state.isOf(ModBlocks.RED_DEVIL)) {
+            player.addStatusEffect(new StatusEffectInstance(StatusEffects.NAUSEA, 10, 0));
         }
     }
 

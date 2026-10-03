@@ -5,10 +5,16 @@
   "item.immortality.immortals_bane": "Immortal's Bane",
   "item.immortality.immortality_nullifier": "Immortality Nullifier Conduit",
   "block.immortality.immortality_nullifier": "Immortality Nullifier Conduit",
+  "block.immortality.white_rose": "White Rose",
+  "block.immortality.red_devil": "Red Devil",
+  "block.immortality.pocket_door": "Pocket Door",
   "itemGroup.immortality.main": "Immortality",
   "key.category.immortality.main": "Immortality",
   "key.immortality.open_status": "Open Immortality Status",
   "screen.immortality.status_title": "Immortality Status",
   "screen.immortality.active": "Immortality: Active",
-  "screen.immortality.deactivated": "Immortality: Deactivated"
+  "screen.immortality.deactivated": "Immortality: Deactivated",
+  "enchantment.immortality.live_by_the_sword": "Live by the Sword",
+  "message.immortality.door_owner": "Only the player who placed this Pocket Door can use it.",
+  "message.immortality.dimension_unavailable": "The pocket dimension is unavailable."
 }

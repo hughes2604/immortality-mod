@@ -80,6 +80,9 @@ public final class ModItems {
                     entries.add(ARROW_OF_MORTALITY);
                     entries.add(IMMORTALS_BANE);
                     entries.add(ModBlocks.IMMORTALITY_NULLIFIER_ITEM);
+                    entries.add(ModBlocks.WHITE_ROSE_ITEM);
+                    entries.add(ModBlocks.RED_DEVIL_ITEM);
+                    entries.add(ModBlocks.POCKET_DOOR_ITEM);
                 })
                 .build());
     }
